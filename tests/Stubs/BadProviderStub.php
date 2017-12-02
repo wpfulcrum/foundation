@@ -18,4 +18,9 @@ class BadProviderStub extends Provider
     {
         // nothing here
     }
+
+    public static function getDefaultsPath()
+    {
+        return __DIR__ . DIRECTORY_SEPARATOR . 'doesnotexist/bad-filename.php';
+    }
 }

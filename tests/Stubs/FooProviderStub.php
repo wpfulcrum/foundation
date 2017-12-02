@@ -9,11 +9,6 @@ class FooProviderStub extends Provider
     protected $hasDefaults = true;
     protected $defaultsLocation = 'fixtures/foo-defaults.php';
 
-    public function register(array $concreteConfig, $uniqueId)
-    {
-        // nothing here
-    }
-
     public function getConcrete(array $config, $uniqueId = '')
     {
         // nothing here

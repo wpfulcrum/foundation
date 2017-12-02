@@ -4,8 +4,6 @@ namespace Fulcrum\Foundation\ServiceProvider;
 
 use Fulcrum\Config\ConfigFactory;
 use Fulcrum\FulcrumContract;
-use InvalidArgumentException;
-use RuntimeException;
 
 abstract class Provider implements ProviderContract
 {
@@ -101,10 +99,9 @@ abstract class Provider implements ProviderContract
             return '';
         }
 
-        $directory              = fulcrum_get_calling_class_directory($this);
-        $this->defaultsLocation = $directory . $this->defaultsLocation;
+        $this->defaultsLocation = fulcrum_get_calling_class_directory($this) . $this->defaultsLocation;
 
-        return $this->loadFile($this->defaultsLocation);
+        return ConfigFactory::loadConfigFile($this->defaultsLocation);
     }
 
     /**
@@ -133,7 +130,7 @@ abstract class Provider implements ProviderContract
     {
         $concreteConfig = $this->parseWithDefaultStructure($concreteConfig);
 
-        if (!$this->isUniqueIdValid($uniqueId) || !$this->isConcreteConfigValid($uniqueId, $concreteConfig)) {
+        if (!Validator::okayToRegister($concreteConfig, $uniqueId, $this->defaultStructure, __CLASS__)) {
             return false;
         }
 
@@ -177,123 +174,6 @@ abstract class Provider implements ProviderContract
         $this->uniqueIds[] = $uniqueId;
 
         return $this->fulcrum->registerConcrete($concrete, $uniqueId);
-    }
-
-    /**
-     * Loads the file
-     *
-     * @since 3.0.0
-     *
-     * @param string $file
-     *
-     * @return string
-     */
-    protected function loadFile($file)
-    {
-        if ($this->isFileValid($file)) {
-            return include $file;
-        }
-    }
-
-    /**
-     * Build the config file's full qualified path
-     *
-     * @since 3.0.0
-     *
-     * @param string $file
-     *
-     * @return bool
-     *
-     * @throws InvalidArgumentException
-     * @throws RuntimeException
-     */
-    public function isFileValid($file)
-    {
-        if (!$file) {
-            throw new InvalidArgumentException(
-                __('A file name is required for the defaults configuration file.', 'fulcrum')
-            );
-        }
-
-        if (!is_readable($file)) {
-            $message = sprintf(
-                '%s %s',
-                __('The specified defaults config file is not readable', 'fulcrum'),
-                $file
-            );
-
-            throw new RuntimeException($message);
-        }
-
-        return true;
-    }
-
-    /**
-     * Checks if the unique id is valid.  Else it throws an error.
-     *
-     * @since 3.0.0
-     *
-     * @param string $uniqueId Container's unique key ID for this instance.
-     *
-     * @throws InvalidArgumentException
-     * @return bool
-     */
-    protected function isUniqueIdValid($uniqueId)
-    {
-        if (!$uniqueId) {
-            throw new InvalidArgumentException(sprintf(
-                __('For the service provider [%s], the container unique ID cannot be empty.', 'fulcrum'),
-                __CLASS__
-            ));
-        }
-
-        return true;
-    }
-
-    /**
-     * Checks if the parameters are valid.
-     *
-     * @since 3.0.0
-     *
-     * @param string $uniqueId Container's unique key ID for this instance.
-     * @param array $concreteConfig Concrete's runtime configuration parameters.
-     *
-     * @throws InvalidArgumentException
-     * @return bool
-     */
-    protected function isConcreteConfigValid($uniqueId, array $concreteConfig)
-    {
-        $isValid = false;
-
-        foreach ($this->defaultStructure as $key => $value) {
-            $isValid = $this->elementExistsAndIsConfigured($key, $concreteConfig);
-
-            if (!$isValid) {
-                throw new InvalidArgumentException(sprintf(
-                    __('For the service provider for unique ID [%s], the %s cannot be empty. [Class %s]', 'fulcrum'),
-                    $uniqueId,
-                    $key,
-                    __CLASS__
-                ));
-            }
-        }
-
-        return $isValid;
-    }
-
-    /**
-     * Checks if the element exists and is configured in the array.
-     *
-     * @since 3.0.0
-     *
-     * @param string $key Key to validate.
-     * @param array $array Array to check.
-     *
-     * @return bool
-     */
-    protected function elementExistsAndIsConfigured($key, $array)
-    {
-        return array_key_exists($key, $array) && $array[$key] !== '';
     }
 
     /**
@@ -358,7 +238,7 @@ abstract class Provider implements ProviderContract
      *
      * @return \Fulcrum\Config\ConfigContract
      */
-    protected function createConfig($config)
+    protected function createConfig(array $config)
     {
         return ConfigFactory::create(
             $config['config'],

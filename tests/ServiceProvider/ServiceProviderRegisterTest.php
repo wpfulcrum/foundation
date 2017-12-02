@@ -6,10 +6,9 @@ use Brain\Monkey\Functions;
 use Fulcrum\Config\Exception\InvalidFileException;
 use Fulcrum\Foundation\Tests\Stubs\BadProviderStub;
 use Fulcrum\Foundation\Tests\Stubs\FooProviderStub;
-use GrumPHP\Exception\RuntimeException;
 use Mockery;
 
-class ServiceProviderCreateTest extends TestCase
+class ServiceProviderRegisterTest extends TestCase
 {
     protected $fulcrumMock;
 
@@ -24,18 +23,6 @@ class ServiceProviderCreateTest extends TestCase
         Functions\when('__')->justReturn('');
         $stub = new FooProviderStub($this->fulcrumMock);
         $this->assertInstanceOf(FooProviderStub::class, $stub);
-    }
-
-    public function testShouldThrowErrorWhenNotReadable()
-    {
-        Functions\when('__')->justReturn('The specified configuration file is not readable');
-
-        try {
-            new BadProviderStub($this->fulcrumMock);
-        } catch (InvalidFileException $exception) {
-            $errorMessage = 'The specified configuration file is not readable: ' . BadProviderStub::getDefaultsPath();
-            $this->assertSame($errorMessage, $exception->getMessage());
-        }
     }
 
     public function testShouldOverrideConcreteDefaultStructure()
