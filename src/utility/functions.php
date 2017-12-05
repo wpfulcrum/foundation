@@ -1,54 +1,6 @@
 <?php
 
-if (!function_exists('fulcrum_prevent_direct_file_access')) {
-    /**
-     * Checks if the file is being accessed directly. If
-     * yes, then it exits the app.
-     *
-     * @since 3.0.0
-     *
-     * @returns void
-     */
-    function fulcrum_prevent_direct_file_access()
-    {
-        if (!defined('ABSPATH')) {
-            exit('Cheatin&#8217; uh?');
-        }
-    }
-}
-
-if (!function_exists('fulcrum_load_config')) {
-    /**
-     * Load and return the Config object
-     *
-     * @since 3.0.0
-     *
-     * @param string $configFile Config filename with extension
-     * @param string $path Config path.  Defaults to plugin config folder
-     *
-     * @returns Fulcrum Returns the Config object
-     */
-    function fulcrum_load_config($configFile, $path = '')
-    {
-        Factory::create($configFile, $path);
-    }
-}
-
-if (!function_exists('fulcrum_flush_rewrites')) {
-    /**
-     * Flush the rewrites
-     *
-     * @since 3.0.0
-     *
-     * @param bool $hardFlush (Optional) True will do a hard flush
-     *
-     * @returns null
-     */
-    function fulcrum_flush_rewrites($hardFlush = true)
-    {
-        flush_rewrite_rules($hardFlush);
-    }
-}
+use Fulcrum\Extender\Arr\DotArray;
 
 if (!function_exists('fulcrum_get_post_id')) {
     /**
@@ -73,7 +25,7 @@ if (!function_exists('fulcrum_get_post_id')) {
     }
 }
 
-if (!function_exists('fulcrum_get_post_id_when_in_backend')) {
+if (!function_exists('get_post_id_when_in_backend')) {
     /**
      * Get the Post ID
      *
@@ -86,7 +38,7 @@ if (!function_exists('fulcrum_get_post_id_when_in_backend')) {
      *
      * @return int Returns the post ID, if one is found; else 0.
      */
-    function fulcrum_get_post_id_when_in_backend($postId = 0)
+    function get_post_id_when_in_backend($postId = 0)
     {
         if (!is_admin()) {
             return $postId;
@@ -117,79 +69,41 @@ if (!function_exists('fulcrum_get_post_id_when_in_backend')) {
     }
 }
 
-if (!function_exists('fulcrum_limit_by_characters')) {
-    /**
-     * Limit the number of characters in a string.
-     *
-     * @param  string $value
-     * @param  int $limit
-     * @param  string $end
-     *
-     * @return string
-     */
-    function fulcrum_limit_by_characters($value, $limit = 100, $end = '...')
-    {
-        if (mb_strlen($value) <= $limit) {
-            return $value;
-        }
-
-        return rtrim(mb_substr($value, 0, $limit, 'UTF-8')) . $end;
-    }
-}
-
-if (!function_exists('fulcrum_word_limiter')) {
-    /**
-     * Limit the number of words in a string.
-     *
-     * @param  string $value
-     * @param  int $limit
-     * @param  string $end
-     *
-     * @return string
-     */
-    function fulcrum_word_limiter($value, $limit = 30, $end = '...')
-    {
-        preg_match('/^\s*+(?:\S++\s*+){1,' . $limit . '}/u', $value, $matches);
-
-        if (!isset($matches[0]) || strlen($value) === strlen($matches[0])) {
-            return $value;
-        }
-
-        return rtrim($matches[0]) . $end;
-    }
-}
-
-if (!function_exists('fulcrum_class_basename')) {
+if (!function_exists('get_class_basename')) {
     /**
      * Get the class "basename" of the given object / class.
      *
-     * @param  string|object $class
+     * @param string|object $class
      *
      * @return string
      */
-    function fulcrum_class_basename($class)
+    function get_class_basename($class)
     {
         $class = is_object($class) ? get_class($class) : $class;
 
         return basename(str_replace('\\', '/', $class));
     }
 }
-if (!function_exists('fulcrum_object_get')) {
+
+if (!function_exists('get_object_item')) {
     /**
      * Get an item from an object using "dot" notation.
      *
-     * @param  object $object
-     * @param  string $key
-     * @param  mixed $default
+     * @since 3.0.0
+     *
+     * @param object $object The haystack.
+     * @param string $dotNotationKey "Dot" notation key(s) to fetch.
+     * @param mixed $default Default value to return if the key/property does not exist.
      *
      * @return mixed
      */
-    function fulcrum_object_get($object, $key, $default = null)
+    function get_object_item($object, $dotNotationKey, $default = null)
     {
-        if (is_null($key) || '' == trim($key)) {
+        if (is_null($dotNotationKey) || '' === trim($dotNotationKey)) {
             return $object;
         }
-        foreach (explode('.', $key) as $segment) {
+
+        foreach (explode('.', $dotNotationKey) as $segment) {
             if (!is_object($object) || !isset($object->{$segment})) {
                 return fulcrum_value($default);
             }
@@ -199,67 +113,43 @@ if (!function_exists('fulcrum_object_get')) {
         return $object;
     }
 }
-if (!function_exists('fulcrum_value')) {
-    /**
-     * Return the default value of the given value.
-     *
-     * @param  mixed $value
-     *
-     * @return mixed
-     */
-    function fulcrum_value($value)
-    {
-        return $value instanceof Closure ? $value() : $value;
-    }
-}
 
-if (!function_exists('fulcrum_with')) {
-    /**
-     * Return the given object. Useful for chaining.
-     *
-     * @param  mixed $object
-     *
-     * @return mixed
-     */
-    function fulcrum_with($object)
-    {
-        return $object;
-    }
-}
-
-if (!function_exists('fulcrum_data_get')) {
+if (!function_exists('get_data_item')) {
     /**
      * Get an item from an array or object using "dot" notation.
      *
-     * @param  mixed $target
-     * @param  string $key
-     * @param  mixed $default
+     * @param  mixed $target The haystack.
+     * @param string $dotNotationKey "Dot" notation key(s) to fetch.
+     * @param  mixed $default Default value to return if the key/property does not exist.
      *
      * @return mixed
      */
-    function fulcrum_data_get($target, $key, $default = null)
+    function get_data_item($target, $dotNotationKey, $default = null)
     {
-        if (is_null($key)) {
+        if (is_null($dotNotationKey)) {
             return $target;
         }
-        foreach (explode('.', $key) as $segment) {
-            if (is_array($target)) {
-                if (!array_key_exists($segment, $target)) {
-                    return fulcrum_value($default);
+
+        $key = is_array($dotNotationKey) ? $dotNotationKey : explode('.', $dotNotationKey);
+
+        while (!is_null($segment = array_shift($key))) {
+            if ($segment === '*') {
+                if ($target instanceof Collection) {
+                    $target = $target->all();
+                } elseif (!is_array($target)) {
+                    return get_default_value($default);
                 }
+
+                $result = Arr::pluck($target, $key);
+                return in_array('*', $key) ? DotArray::collapse($result) : $result;
+            }
+
+            if (DotArray::isArrayAccessible($target) && DotArray::exists($target, $segment)) {
                 $target = $target[$segment];
-            } elseif ($target instanceof ArrayAccess) {
-                if (!isset($target[$segment])) {
-                    return fulcrum_value($default);
-                }
-                $target = $target[$segment];
-            } elseif (is_object($target)) {
-                if (!isset($target->{$segment})) {
-                    return fulcrum_value($default);
-                }
+            } elseif (is_object($target) && isset($target->{$segment})) {
                 $target = $target->{$segment};
             } else {
-                return fulcrum_value($default);
+                return get_default_value($default);
             }
         }
 
@@ -267,145 +157,102 @@ if (!function_exists('fulcrum_data_get')) {
     }
 }
 
-if (!function_exists('fulcrum_init_authordata')) {
-    function fulcrum_init_authordata()
-    {
-        global $authordata;
-
-        $authordata = is_object($authordata)
-            ? $authordata
-            : get_userdata(get_query_var('author'));
-    }
-}
-
-if (!function_exists('fulcrum_get_calling_class_directory')) {
+if (!function_exists('get_calling_class_info')) {
     /**
-     * Get child's directory.
+     * Get calling class' info.
      *
      * @since 3.0.0
      *
      * @param mixed $object Instance of the object to work on.
      *
-     * @return string
+     * @return ReflectionClass|void
      */
-    function fulcrum_get_calling_class_directory($object)
+    function get_calling_class_info($object)
     {
-        if (!is_object($object)) {
-            return '';
+        if (is_object($object)) {
+            return new ReflectionClass(get_class($object));
         }
-        $classInfo = new ReflectionClass(get_class($object));
-        return trailingslashit(dirname($classInfo->getFileName()));
     }
 }
 
-if (!function_exists('fulcrum_add_button_class')) {
+if (!function_exists('get_calling_class_directory')) {
     /**
-     * Add button class to a tag.
+     * Get calling class' directory.
      *
-     * @since 1.0.3
+     * Handy when working within a root class.
      *
-     * @param string $html
-     * @param array $classes
+     * @since 3.0.0
      *
-     * @return string
+     * @param mixed $object Instance of the object to work on.
+     *
+     * @return string|void
      */
-    function fulcrum_add_button_class($html, array $classes = [])
+    function get_calling_class_directory($object)
     {
-        if (fulcrum_str_contains($html, '<a class="')) {
-            $newPattern    = '<a class="%s ';
-            $searchPattern = '<a class="';
-        } else {
-            $newPattern    = '<a class="%s"';
-            $searchPattern = '<a';
+        $classInfo = get_calling_class_info($object);
+        if ($classInfo) {
+            return dirname($classInfo->getFileName());
         }
-
-        $classes[]  = 'button';
-        $newPattern = sprintf($newPattern, join(' ', $classes));
-
-        return str_replace($searchPattern, $newPattern, $html);
     }
 }
 
-if (!function_exists('fulcrum_add_grid_to_post_class')) {
+if (!function_exists('get_default_value')) {
     /**
-     * Add grid classes to the posts.
+     * Return the default value of the given value.
      *
-     * @since 1.0.3
+     * If the value is a closure, then invoke it.
      *
-     * @param array $classes
+     * @param mixed $value Value to evaluate.
      *
-     * @return array
+     * @return mixed
      */
-    function fulcrum_add_grid_to_post_class(array $classes)
+    function get_default_value($value)
     {
-        global $wp_query;
-
-        $classes[] = 'one-half';
-
-        if ($wp_query->current_post > 0 && $wp_query->current_post % 2) {
-            $classes[] = 'last';
+        if ($value instanceof Closure) {
+            return $value();
         }
 
-        return $classes;
+        return $value;
     }
 }
 
-function fulcrum_sanitize_metadata($metadata, $filter = '')
-{
-    if (!is_array($metadata)) {
-        return fulcrum_sanitize_single_metadata($metadata, $filter);
-    }
-
-    foreach ($metadata as $key => $value) {
-        $metadata[$key] = fulcrum_sanitize_single_metadata($value, $filter[$key]);
-    }
-
-    return $metadata;
-}
-
-function fulcrum_sanitize_single_metadata($value, $filter = '')
-{
-    if ($filter) {
-        return $filter($value);
-    }
-
-    if (is_numeric($value)) {
-        return (int) $value;
-    }
-
-    return strip_tags($value);
-}
-
-if (!function_exists('fulcrum_get_url_relative_to_home_url')) {
+if (!function_exists('with')) {
     /**
-     * Get the URL relative to the site's root (home url).
+     * Return the given value.
      *
-     * Performance function.
+     * Optionally passed through the given callback. Useful for chaining.
      *
-     * This function uses `get_home_url()` and caches it.  It allows us to speed up
-     * building links and menus as we don't have to call `home_url( 'some-path' );`
-     * over and over again.
+     * @since 3.0.0
      *
-     * @since 1.2.3
+     * @param  mixed $value
+     * @param  callable|null $callback
      *
-     * @param  string $path Optional. Path relative to the home URL. Default empty.
-     * @param  string|null $scheme Optional. Scheme to give the home URL context. Accepts
-     *                              'http', 'https', 'relative', 'rest', or null. Default null.
-     *
-     * @return string Home URL link with optional path appended.
+     * @return mixed
      */
-    function fulcrum_get_url_relative_to_home_url($path = '', $scheme = null)
+    function with($value, callable $callback = null)
     {
-        static $homeUrl;
-
-        if (!$homeUrl) {
-            $homeUrl = get_home_url(null, '', $scheme);
+        if (is_null($callback)) {
+            return $value;
         }
 
-        if (!$homeUrl) {
-            return '';
+        return $callback($value);
+    }
+}
+
+if (!function_exists('fulcrum_is_dev_environment')) {
+    /**
+     * Checks if the current environment is set to local dev or not.
+     *
+     * @since 3.0.0
+     *
+     * @returns bool
+     */
+    function fulcrum_is_dev_environment()
+    {
+        if (!defined('FULCRUM_ENV')) {
+            return false;
         }
 
-        return sprintf('%s/%s', $homeUrl, ltrim($path, '/'));
+        return FULCRUM_ENV === 'dev';
     }
 }

@@ -6,7 +6,6 @@ use Brain\Monkey\Functions;
 use Fulcrum\Config\Exception\InvalidFileException;
 use Fulcrum\Foundation\Tests\Stubs\BadProviderStub;
 use Fulcrum\Foundation\Tests\Stubs\FooProviderStub;
-use GrumPHP\Exception\RuntimeException;
 use Mockery;
 
 class ServiceProviderCreateTest extends TestCase

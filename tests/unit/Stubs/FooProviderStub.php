@@ -8,10 +8,18 @@ class FooProviderStub extends Provider
 {
     protected $hasDefaults = true;
     protected $defaultsLocation = 'fixtures/foo-defaults.php';
+    public $skipQueue = false;
 
     public function getConcrete(array $config, $uniqueId = '')
     {
-        // nothing here
+        return [
+            'autoload' => $config['autoload'],
+            'concrete' => function () use ($config) {
+                return new ConcreteStub(
+                    $this->createConfig($config['config'])
+                );
+            },
+        ];
     }
 
     protected function getConcreteDefaultStructure()

@@ -99,7 +99,7 @@ abstract class Provider implements ProviderContract
             return '';
         }
 
-        $this->defaultsLocation = fulcrum_get_calling_class_directory($this) . $this->defaultsLocation;
+        $this->defaultsLocation = get_calling_class_directory($this) . DIRECTORY_SEPARATOR . $this->defaultsLocation;
 
         return ConfigFactory::loadConfigFile($this->defaultsLocation);
     }
@@ -116,6 +116,10 @@ abstract class Provider implements ProviderContract
         // do nothing.
     }
 
+    /***************************
+     * Public
+     **************************/
+
     /**
      * Register a concrete into the container.
      *
@@ -130,13 +134,13 @@ abstract class Provider implements ProviderContract
     {
         $concreteConfig = $this->parseWithDefaultStructure($concreteConfig);
 
-        if (!Validator::okayToRegister($concreteConfig, $uniqueId, $this->defaultStructure, __CLASS__)) {
+        if (!Validator::okayToRegister($uniqueId, $concreteConfig, $this->defaultStructure, __CLASS__)) {
             return false;
         }
 
         $concrete = $this->getConcrete($concreteConfig, $uniqueId);
 
-        if ($this->skipQueue) {
+        if (true === $this->skipQueue) {
             return $this->registerConcrete($concrete, $uniqueId);
         }
 
