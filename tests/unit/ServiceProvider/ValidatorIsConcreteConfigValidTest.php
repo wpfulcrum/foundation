@@ -1,13 +1,14 @@
 <?php
 
-namespace Fulcrum\Foundation\Tests;
+namespace Fulcrum\Foundation\Tests\Unit\ServiceProvider;
 
 use Brain\Monkey\Functions;
 use Fulcrum\Config\Exception\InvalidSourceException;
 use Fulcrum\Foundation\Exception\MissingRequiredParameterException;
 use Fulcrum\Foundation\ServiceProvider\Validator;
+use Fulcrum\Foundation\Tests\Unit\FulcrumTestCase;
 
-class ValidatorIsConcreteConfigValidTest extends TestCase
+class ValidatorIsConcreteConfigValidTest extends FulcrumTestCase
 {
     protected static $defaultStructure = [
         'autoload' => false,

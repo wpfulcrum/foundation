@@ -1,11 +1,11 @@
 <?php
 
-namespace Fulcrum\Foundation\Tests;
+namespace Fulcrum\Foundation\Tests\Unit;
 
 use Brain\Monkey;
-use Mockery;
+use PHPUnit\Framework\TestCase;
 
-abstract class TestCase extends \PHPUnit_Framework_TestCase
+abstract class FulcrumTestCase extends TestCase
 {
     protected $isLoaded = false;
     protected $testArrayPath;
@@ -29,6 +29,5 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     {
         Monkey\tearDown();
         parent::tearDown();
-        Mockery::close();
     }
 }

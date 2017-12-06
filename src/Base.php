@@ -77,7 +77,7 @@ abstract class Base
      ********************************/
 
     /**
-     * Instantiate the object
+     * Instantiate the object.
      *
      * @since 3.0.0
      *
@@ -137,7 +137,7 @@ abstract class Base
             return '';
         }
 
-        $defaultFile = static::$defaultsFile ?: self::get_classname() . '.php';
+        $defaultFile = static::$defaultsFile ?: self::getClassname() . '.php';
 
         return $defaultsFolder . $defaultFile;
     }
@@ -164,7 +164,7 @@ abstract class Base
      *
      * @return string
      */
-    protected function getChildCirectory()
+    protected function getChildDirectory()
     {
         $classInfo = new \ReflectionClass(get_class($this));
         return trailingslashit(dirname($classInfo->getFileName()));

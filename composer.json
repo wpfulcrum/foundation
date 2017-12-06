@@ -20,8 +20,7 @@
       "Fulcrum\\Foundation\\": "src"
     },
     "files": [
-      "src/utility/date-time.php",
-      "src/utility/functions.php"
+      "src/utility/helpers.php"
     ],
     "exclude-from-classmap": [
       "/tests/"
@@ -29,8 +28,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Fulcrum\\Tests\\Unit\\Foundation\\": "tests/unit/",
-      "Fulcrum\\Tests\\Integration\\Foundation\\": "tests/integration/"
+      "Fulcrum\\Foundation\\Tests\\": "tests/"
     }
   },
   "require": {
@@ -51,7 +49,6 @@
   "prefer-stable": true,
   "scripts": {
     "phpcs": "\"vendor/bin/phpcs\"",
-    "test-unit": "\"vendor/bin/phpunit\" --testsuite unit",
-    "test-integration": "\"vendor/bin/phpunit\" --testsuite integration --configuration tests/integration/phpunit.xml.dist"
+    "test-unit": "\"vendor/bin/phpunit\" --testsuite unit"
   }
 }

@@ -1,11 +1,12 @@
 <?php
 
-namespace Fulcrum\Foundation\Tests;
+namespace Fulcrum\Foundation\Tests\Unit\ServiceProvider;
 
 use Brain\Monkey\Functions;
 use Fulcrum\Foundation\ServiceProvider\Validator;
+use Fulcrum\Foundation\Tests\Unit\FulcrumTestCase;
 
-class ValidatorIsUniqueIdValidTest extends TestCase
+class ValidatorIsUniqueIdValidTest extends FulcrumTestCase
 {
 
     public function testShouldThrowErrorWhenEmpty()

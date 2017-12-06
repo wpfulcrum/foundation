@@ -1,14 +1,15 @@
 <?php
 
-namespace Fulcrum\Foundation\Tests;
+namespace Fulcrum\Foundation\Tests\Unit\ServiceProvider;
 
 use Brain\Monkey\Functions;
 use Fulcrum\Config\ConfigFactory;
-use Fulcrum\Foundation\Tests\Stubs\ConcreteStub;
-use Fulcrum\Foundation\Tests\Stubs\FooProviderStub;
+use Fulcrum\Foundation\Tests\Unit\Stubs\ConcreteStub;
+use Fulcrum\Foundation\Tests\Unit\Stubs\FooProviderStub;
+use Fulcrum\Foundation\Tests\Unit\FulcrumTestCase;
 use Mockery;
 
-class ServiceProviderRegisterTest extends TestCase
+class ServiceProviderRegisterTest extends FulcrumTestCase
 {
     protected $fulcrumMock;
     protected static $config = [
