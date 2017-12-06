@@ -57,6 +57,6 @@ class BaseCreateTest extends FulcrumTestCase
             'foo' => 'bar',
         ]);
         $stub = new FooBaseStub($config, $this->fulcrumMock);
-        $this->assertSame(__DIR__ . '/unitfoobasestub.php', $stub::getDefaultsFile(__DIR__));
+        $this->assertSame('foo/foobasestub.php', $stub::getDefaultsFile('foo'));
     }
 }

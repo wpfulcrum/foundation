@@ -139,7 +139,7 @@ abstract class Base
 
         $defaultFile = static::$defaultsFile ?: self::getClassname() . '.php';
 
-        return $defaultsFolder . $defaultFile;
+        return trailingslashit($defaultsFolder) . $defaultFile;
     }
 
     /**
