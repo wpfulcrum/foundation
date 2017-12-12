@@ -1,13 +1,12 @@
 <?php
 
-namespace Fulcrum\Foundation\Tests\Unit\Utility;
+namespace Fulcrum\Tests\Unit\Foundation\Utility;
 
-use Brain\Monkey\Functions;
-use Fulcrum\Foundation\Tests\Unit\Stubs\ArrayAccessStub;
-use Fulcrum\Foundation\Tests\Unit\Stubs\FooStub;
-use Fulcrum\Foundation\Tests\Unit\FulcrumTestCase;
+use Fulcrum\Tests\Unit\Foundation\Stubs\ArrayAccessStub;
+use Fulcrum\Tests\Unit\Foundation\Stubs\FooStub;
+use Fulcrum\Tests\Unit\UnitTestCase;
 
-class HelpersTest extends FulcrumTestCase
+class HelpersTest extends UnitTestCase
 {
     public function testShouldGetClassBasename()
     {
@@ -71,11 +70,11 @@ class HelpersTest extends FulcrumTestCase
 
         $object = new FooStub();
         $this->assertSame(
-            'Fulcrum\Foundation\Tests\Unit\Stubs\FooStub',
+            'Fulcrum\Tests\Unit\Foundation\Stubs\FooStub',
             get_calling_class_info($object)->getName()
         );
         $this->assertSame(
-            FULCRUM_FOUNDATION_TESTS_DIR . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'FooStub.php',
+            dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Stubs' . DIRECTORY_SEPARATOR . 'FooStub.php',
             get_calling_class_info($object)->getFileName()
         );
     }
@@ -88,7 +87,7 @@ class HelpersTest extends FulcrumTestCase
     public function testShouldReturnDirWhenGettingCallingClass()
     {
         $this->assertSame(
-            FULCRUM_FOUNDATION_TESTS_DIR . DIRECTORY_SEPARATOR . 'stubs',
+            dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Stubs',
             get_calling_class_directory(new FooStub())
         );
     }

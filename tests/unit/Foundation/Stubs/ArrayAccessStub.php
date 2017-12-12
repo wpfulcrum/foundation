@@ -1,6 +1,6 @@
 <?php
 
-namespace Fulcrum\Foundation\Tests\Unit\Stubs;
+namespace Fulcrum\Tests\Unit\Foundation\Stubs;
 
 class ArrayAccessStub implements \ArrayAccess
 {

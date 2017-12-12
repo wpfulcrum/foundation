@@ -1,15 +1,15 @@
 <?php
 
-namespace Fulcrum\Foundation\Tests\Unit\ServiceProvider;
+namespace Fulcrum\Tests\Unit\Foundation\ServiceProvider;
 
 use Brain\Monkey\Functions;
 use Fulcrum\Config\Exception\InvalidFileException;
-use Fulcrum\Foundation\Tests\Unit\Stubs\BadProviderStub;
-use Fulcrum\Foundation\Tests\Unit\Stubs\FooProviderStub;
-use Fulcrum\Foundation\Tests\Unit\FulcrumTestCase;
+use Fulcrum\Tests\Unit\Foundation\Stubs\BadProviderStub;
+use Fulcrum\Tests\Unit\Foundation\Stubs\FooProviderStub;
+use Fulcrum\Tests\Unit\UnitTestCase;
 use Mockery;
 
-class ServiceProviderCreateTest extends FulcrumTestCase
+class ServiceProviderCreateTest extends UnitTestCase
 {
     protected $fulcrumMock;
 
@@ -56,7 +56,7 @@ class ServiceProviderCreateTest extends FulcrumTestCase
     {
         Functions\when('__')->justReturn('');
         $stub = new FooProviderStub($this->fulcrumMock);
-        $path = FULCRUM_FOUNDATION_TESTS_DIR . '/stubs/fixtures/foo-defaults.php';
+        $path = dirname(__DIR__) . '/Stubs/fixtures/foo-defaults.php';
 
         $this->assertEquals($path, $stub->defaultsLocation);
         $this->assertEquals([

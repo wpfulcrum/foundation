@@ -17,18 +17,15 @@
   ],
   "autoload": {
     "psr-4": {
-      "Fulcrum\\Foundation\\": "src"
+      "Fulcrum\\Foundation\\": "src/Foundation/"
     },
     "files": [
-      "src/utility/helpers.php"
-    ],
-    "exclude-from-classmap": [
-      "/tests/"
+      "src/Foundation/Utility/helpers.php"
     ]
   },
   "autoload-dev": {
     "psr-4": {
-      "Fulcrum\\Foundation\\Tests\\": "tests/"
+      "Fulcrum\\Tests\\Unit\\": "tests/unit/"
     }
   },
   "require": {

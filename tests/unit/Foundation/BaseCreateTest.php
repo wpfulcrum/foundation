@@ -1,16 +1,13 @@
 <?php
 
-namespace Fulcrum\Foundation\Tests\Unit;
+namespace Fulcrum\Tests\Unit\Foundation;
 
-use Brain\Monkey\Functions;
 use Fulcrum\Config\ConfigFactory;
-use Fulcrum\Config\Exception\InvalidFileException;
-use Fulcrum\Foundation\Tests\Unit\Stubs\BadProviderStub;
-use Fulcrum\Foundation\Tests\Unit\Stubs\FooBaseStub;
-use Fulcrum\Foundation\Tests\Unit\Stubs\FooProviderStub;
+use Fulcrum\Tests\Unit\Foundation\Stubs\FooBaseStub;
+use Fulcrum\Tests\Unit\UnitTestCase;
 use Mockery;
 
-class BaseCreateTest extends FulcrumTestCase
+class BaseCreateTest extends UnitTestCase
 {
     protected $fulcrumMock;
 

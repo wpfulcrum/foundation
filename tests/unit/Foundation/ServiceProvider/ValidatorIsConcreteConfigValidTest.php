@@ -1,14 +1,14 @@
 <?php
 
-namespace Fulcrum\Foundation\Tests\Unit\ServiceProvider;
+namespace Fulcrum\Tests\Unit\Foundation\ServiceProvider;
 
 use Brain\Monkey\Functions;
 use Fulcrum\Config\Exception\InvalidSourceException;
 use Fulcrum\Foundation\Exception\MissingRequiredParameterException;
 use Fulcrum\Foundation\ServiceProvider\Validator;
-use Fulcrum\Foundation\Tests\Unit\FulcrumTestCase;
+use Fulcrum\Tests\Unit\UnitTestCase;
 
-class ValidatorIsConcreteConfigValidTest extends FulcrumTestCase
+class ValidatorIsConcreteConfigValidTest extends UnitTestCase
 {
     protected static $defaultStructure = [
         'autoload' => false,
@@ -18,7 +18,8 @@ class ValidatorIsConcreteConfigValidTest extends FulcrumTestCase
     public function testShouldThrowErrorWhenMissingConfigParam()
     {
         Functions\when('__')
-            ->justReturn("The required %s parameter is missing in the service provider's configuration for unique ID [%s]. [Class %s]"); // @codingStandardsIgnoreLine - Generic.Files.LineLength.TooLong
+            ->justReturn("The required %s parameter is missing in the service provider's configuration " .
+                         'for unique ID [%s]. [Class %s]');
 
         $expected = [
             'foo'    => [
@@ -45,7 +46,8 @@ class ValidatorIsConcreteConfigValidTest extends FulcrumTestCase
                 );
             } catch (MissingRequiredParameterException $exception) {
                 $errorMessage = sprintf(
-                    "The required %s parameter is missing in the service provider's configuration for unique ID [%s]. [Class %s]", // @codingStandardsIgnoreLine - Generic.Files.LineLength.TooLong
+                    "The required %s parameter is missing in the service provider's configuration " .
+                    'for unique ID [%s]. [Class %s]',
                     $uniqueId,
                     $params['missingParameter'],
                     __CLASS__

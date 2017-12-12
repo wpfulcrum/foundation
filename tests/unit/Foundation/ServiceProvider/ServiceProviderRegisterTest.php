@@ -1,15 +1,15 @@
 <?php
 
-namespace Fulcrum\Foundation\Tests\Unit\ServiceProvider;
+namespace Fulcrum\Tests\Unit\Foundation\ServiceProvider;
 
 use Brain\Monkey\Functions;
 use Fulcrum\Config\ConfigFactory;
-use Fulcrum\Foundation\Tests\Unit\Stubs\ConcreteStub;
-use Fulcrum\Foundation\Tests\Unit\Stubs\FooProviderStub;
-use Fulcrum\Foundation\Tests\Unit\FulcrumTestCase;
+use Fulcrum\Tests\Unit\Foundation\Stubs\ConcreteStub;
+use Fulcrum\Tests\Unit\Foundation\Stubs\FooProviderStub;
+use Fulcrum\Tests\Unit\UnitTestCase;
 use Mockery;
 
-class ServiceProviderRegisterTest extends FulcrumTestCase
+class ServiceProviderRegisterTest extends UnitTestCase
 {
     protected $fulcrumMock;
     protected static $config = [
@@ -28,7 +28,7 @@ class ServiceProviderRegisterTest extends FulcrumTestCase
 
     public function testShouldQueueConcrete()
     {
-        $stub = new FooProviderStub($this->fulcrumMock);
+        $stub     = new FooProviderStub($this->fulcrumMock);
         $concrete = $stub->register(self::$config, 'foo');
 
         $this->assertTrue(is_array($concrete));
@@ -54,11 +54,11 @@ class ServiceProviderRegisterTest extends FulcrumTestCase
 
     public function testShouldRegisterConcreteAndReturnIt()
     {
-        $stub            = new FooProviderStub($this->fulcrumMock);
-        $stub->skipQueue = true;
-        $config = self::$config;
+        $stub               = new FooProviderStub($this->fulcrumMock);
+        $stub->skipQueue    = true;
+        $config             = self::$config;
         $config['autoload'] = true;
-        $expected = new ConcreteStub(
+        $expected           = new ConcreteStub(
             ConfigFactory::create($config['config'])
         );
 

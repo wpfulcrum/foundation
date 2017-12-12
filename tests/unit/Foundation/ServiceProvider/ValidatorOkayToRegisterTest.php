@@ -1,12 +1,12 @@
 <?php
 
-namespace Fulcrum\Foundation\Tests\Unit\ServiceProvider;
+namespace Fulcrum\Tests\Unit\Foundation\ServiceProvider;
 
 use Brain\Monkey\Functions;
 use Fulcrum\Foundation\ServiceProvider\Validator;
-use Fulcrum\Foundation\Tests\Unit\FulcrumTestCase;
+use Fulcrum\Tests\Unit\UnitTestCase;
 
-class ValidatorOkayToRegisterTest extends FulcrumTestCase
+class ValidatorOkayToRegisterTest extends UnitTestCase
 {
     protected static $defaultStructure = [
         'autoload' => false,
